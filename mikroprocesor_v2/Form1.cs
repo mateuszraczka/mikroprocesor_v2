@@ -1,23 +1,18 @@
-using System.Drawing.Text;
-using System.Reflection.Metadata.Ecma335;
-
 namespace mikroprocesor_v2
 {
     public partial class Form1 : Form
     {
         public Dictionary<string, string> register = new Dictionary<string, string>();
+        public Dictionary<string, bool> registerValidationHistory = new Dictionary<string, bool>();
         public Form1()
         {
+            createRegisters();
             InitializeComponent();
-            register.Add("AL", REGISTER_DEFAULT);
-            register.Add("AH", REGISTER_DEFAULT);
-            register.Add("BL", REGISTER_DEFAULT);
-            register.Add("BH", REGISTER_DEFAULT);
-            register.Add("CL", REGISTER_DEFAULT);
-            register.Add("CH", REGISTER_DEFAULT);
-            register.Add("DL", REGISTER_DEFAULT);
-            register.Add("DH", REGISTER_DEFAULT);
         }
+
+        const int MINIMUM_LENGTH = 2;
+        const int MAXIMUM_LENGTH = 2;
+        const string REGISTER_DEFAULT = "FF";
         char[] allowedCharacters = {
                 '0',
                 '1',
@@ -37,9 +32,105 @@ namespace mikroprocesor_v2
                 'F'
             };
 
-        const int MINIMUM_LENGTH = 2;
-        const int MAXIMUM_LENGTH = 2;
-        const string REGISTER_DEFAULT = "FF";
+        ///
+        /// REGISTER
+        ///
+        private void RefreshAllRegisters()
+        {
+            al_value.Text = register["AL"];
+            ah_value.Text = register["AH"];
+            bl_value.Text = register["BL"];
+            bh_value.Text = register["BH"];
+            cl_value.Text = register["CL"];
+            ch_value.Text = register["CH"];
+            dl_value.Text = register["DL"];
+            dh_value.Text = register["DH"];
+        }
+        public void createRegisters()
+        {
+            register.Add("AL", REGISTER_DEFAULT);
+            register.Add("AH", REGISTER_DEFAULT);
+            register.Add("BL", REGISTER_DEFAULT);
+            register.Add("BH", REGISTER_DEFAULT);
+            register.Add("CL", REGISTER_DEFAULT);
+            register.Add("CH", REGISTER_DEFAULT);
+            register.Add("DL", REGISTER_DEFAULT);
+            register.Add("DH", REGISTER_DEFAULT);
+
+            registerValidationHistory.Add("AL", false);
+            registerValidationHistory.Add("AH", false);
+            registerValidationHistory.Add("BL", false);
+            registerValidationHistory.Add("BH", false);
+            registerValidationHistory.Add("CL", false);
+            registerValidationHistory.Add("CH", false);
+            registerValidationHistory.Add("DL", false);
+            registerValidationHistory.Add("DH", false);
+        }
+
+        public void Clear()
+        {
+            setregisters.Controls.OfType<TextBox>().ToList().ForEach(t => t.Text = string.Empty);
+
+            al_value.Text = "FF";
+            ah_value.Text = "FF";
+            bl_value.Text = "FF";
+            bh_value.Text = "FF";
+            cl_value.Text = "FF";
+            ch_value.Text = "FF";
+            dl_value.Text = "FF";
+            dh_value.Text = "FF";
+
+            al_value.BackColor = Color.Red;
+            ah_value.BackColor = Color.Red;
+            bl_value.BackColor = Color.Red;
+            bh_value.BackColor = Color.Red;
+            cl_value.BackColor = Color.Red;
+            ch_value.BackColor = Color.Red;
+            dl_value.BackColor = Color.Red;
+            dh_value.BackColor = Color.Red;
+
+            register = register.ToDictionary(p => p.Key, p => REGISTER_DEFAULT);
+        }
+        public void ChangeRegisterAndApply(Label currentValueBox, TextBox currentTextBox, string currentRegister)
+        {
+            register[currentRegister] = currentTextBox.Text;
+            currentValueBox.Text = register[currentRegister];
+            currentValueBox.BackColor = Color.Green;
+        }
+
+        ///
+        /// REGISTERS PROGRESSBAR
+        /// 
+
+        public void UpdateProgressBar(ProgressBar currentProgress, bool validation, TextBox currentTextBox)
+        {
+            if (validation)
+            {
+                if (registerValidationHistory[currentTextBox.AccessibleName] == false)
+                {
+                    registerValidationHistory[currentTextBox.AccessibleName] = true;
+                }
+                if (currentProgress.Value < currentProgress.Maximum)
+                {
+                    currentProgress.Value++;
+                }
+            }
+            else
+            {
+                if (registerValidationHistory[currentTextBox.AccessibleName] == true)
+                {
+                    registerValidationHistory[currentTextBox.AccessibleName] = false;
+                    if (currentProgress.Value > currentProgress.Minimum)
+                    {
+                        currentProgress.Value--;
+                    }
+                }
+            }
+        }
+
+        ///
+        /// TEXTBOXES VALIDATION
+        ///
 
         public bool ValidateTextBoxMinimumLength(string txt, int minimumLength)
         {
@@ -63,7 +154,7 @@ namespace mikroprocesor_v2
                     if (arr1[i] == arr2[j])
                     {
                         checkNumber++;
-                        if(validateNumber == checkNumber)
+                        if (validateNumber == checkNumber)
                         {
                             return true;
                         }
@@ -75,7 +166,7 @@ namespace mikroprocesor_v2
 
         public bool ValidateTextBox(string input)
         {
-            if (ValidateTextBoxMinimumLength(input,MINIMUM_LENGTH) && ValidateTextBoxMaximumLength(input, MAXIMUM_LENGTH))
+            if (ValidateTextBoxMinimumLength(input, MINIMUM_LENGTH) && ValidateTextBoxMaximumLength(input, MAXIMUM_LENGTH))
             {
                 while (true)
                 {
@@ -85,47 +176,7 @@ namespace mikroprocesor_v2
             }
             return false;
         }
-
-        public void ChangeRegisterAndApply(Label currentValueBox, TextBox currentTextBox, string currentRegister)
-        {
-            register[currentRegister] = currentTextBox.Text;
-            currentValueBox.Text = register[currentRegister];
-        }
-
-        public void ClearRegisterAndApply()
-        {
-            al_textbox.Text = "";
-            ah_textbox.Text = "";
-            bl_textbox.Text = "";
-            bh_textbox.Text = "";
-            cl_textbox.Text = "";
-            ch_textbox.Text = "";
-            dl_textbox.Text = "";
-            dh_textbox.Text = "";
-
-            al_value.Text = "  ";
-            ah_value.Text = "  ";
-            bl_value.Text = "  ";
-            bh_value.Text = "  ";
-            cl_value.Text = "  ";
-            ch_value.Text = "  ";
-            dl_value.Text = "  ";
-            dh_value.Text = "  ";
-
-            register = register.ToDictionary(p => p.Key, p => REGISTER_DEFAULT);
-        }
-        public void RegistersProgress(CheckBox currentCheckBox, ProgressBar currentProgress)
-        {
-            if (currentCheckBox.Checked)
-            {
-                if (currentProgress.Value < registers_progress.Maximum) registers_progress.Value++;
-            }
-            else
-            {
-                if (currentProgress.Value > registers_progress.Minimum) registers_progress.Value--;
-            }
-        }
-        public void ValidationVisualization(CheckBox currentCheckBox, TextBox currentTextBox, bool validated, ProgressBar currentProgress)
+        public void ValidationVisualization(CheckBox currentCheckBox, TextBox currentTextBox, bool validated)
         {
             if (validated)
             {
@@ -137,7 +188,20 @@ namespace mikroprocesor_v2
                 currentCheckBox.Checked = false;
                 currentTextBox.BackColor = Color.LightCoral;
             }
-            RegistersProgress(currentCheckBox, currentProgress);
+        }
+        private void ValidateIfAllRegistersAreSet()
+        {
+            bool allTrue = CheckDictionary(registerValidationHistory);
+            if (allTrue == true)
+            {
+                functions.Enabled = true;
+                errorMessage.Visible = false;
+            }
+            else
+            {
+                functions.Enabled = false;
+                errorMessage.Visible = true;
+            }
         }
         private void ValidateRegister(TextBox currentTextBox, CheckBox currentCheckBox, Label currentValueBox)
         {
@@ -146,10 +210,17 @@ namespace mikroprocesor_v2
 
             if (validateTextBox)
             {
-                ChangeRegisterAndApply(currentValueBox,currentTextBox,currentTextBox.AccessibleName);
+                ChangeRegisterAndApply(currentValueBox, currentTextBox, currentTextBox.AccessibleName);
             }
-            ValidationVisualization(currentCheckBox, currentTextBox, validateTextBox, currentProgress);
+            UpdateProgressBar(currentProgress, validateTextBox, currentTextBox);
+            ValidationVisualization(currentCheckBox, currentTextBox, validateTextBox);
+            ValidateIfAllRegistersAreSet();
         }
+
+        ///
+        /// TEXTBOXES ONCHANGE
+        ///
+
         private void al_textbox_TextChanged(object sender, EventArgs e)
         {
             var currentTextBox = (TextBox)sender;
@@ -212,21 +283,99 @@ namespace mikroprocesor_v2
             ValidateRegister(currentTextBox, currentCheckBox, currentValueBox);
         }
 
-        private void Reset_Click(object sender, EventArgs e)
+        ///
+        /// COMBOBOXES VALIDATION
+        ///
+        public void ValidateIfAllComboBoxesAreSet()
         {
-            ClearRegisterAndApply();
-            registers_progress.Value = 0;
+            if ((reg1.SelectedIndex != -1 && (reg2.SelectedIndex != -1) && (choose_function.SelectedIndex != -1)))
+            {
+                execute.Enabled = true;
+            }
+            else
+            {
+                execute.Enabled = false;
+            }
         }
-        private void mov(string from, string to)
-        {
-            to = from;
-        }
+
+        ///
+        /// COMBOBOXES ON CHANGE
+        ///
+
         private void choose_function_SelectedIndexChanged(object sender, EventArgs e)
         {
-            if(choose_function.SelectedIndex == 0)
+            ValidateIfAllComboBoxesAreSet();
+        }
+
+        private void reg1_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            ValidateIfAllComboBoxesAreSet();
+        }
+
+        private void reg2_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            ValidateIfAllComboBoxesAreSet();
+        }
+        /// 
+        /// FUNCTIONS AND EXECUTION
+        /// 
+
+        private void Mov(string from, string to)
+        {
+            register[to] = register[from];
+        }
+
+        private void Xchg(string from, string to)
+        {
+            string temp = register[to];
+            register[to] = register[from];
+            register[from] = temp;
+        }
+
+        private void execute_Click(object sender, EventArgs e)
+        {
+            string currentSelectedFunction = choose_function.Items[choose_function.SelectedIndex].ToString();
+            string firstRegister = reg1.Items[reg1.SelectedIndex].ToString();
+            string secondRegister = reg2.Items[reg2.SelectedIndex].ToString();
+
+            if (currentSelectedFunction == "MOV")
             {
-                mov(register["AL"], register["AH"]);
+                Mov(firstRegister, secondRegister);
             }
+            else if (currentSelectedFunction == "XCHG")
+            {
+                Xchg(firstRegister, secondRegister);
+            }
+            RefreshAllRegisters();
+        }
+
+        ///
+        /// MAIN PROGRAM FUNCTIONS
+        ///
+
+        public bool CheckDictionary(Dictionary<string, bool> dictToCheck)
+        {
+            var test = dictToCheck.Where(x => x.Value == false);
+            if (test.Count() == 0)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+        private void Reset_Click(object sender, EventArgs e)
+        {
+            Clear();
+            registers_progress.Value = 0;
+            functions.Enabled = false;
+            reg1.SelectedIndex = -1;
+            reg2.SelectedIndex = -1;
+            choose_function.SelectedIndex = -1;
+            reg1.Text = reg1.AccessibleName;
+            reg2.Text = reg2.AccessibleName;
+            choose_function.Text = choose_function.AccessibleName;
         }
     }
 }
