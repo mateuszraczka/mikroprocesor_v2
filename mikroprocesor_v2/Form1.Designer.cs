@@ -62,9 +62,12 @@
             this.bl_check = new System.Windows.Forms.CheckBox();
             this.bh_check = new System.Windows.Forms.CheckBox();
             this.setregisters = new System.Windows.Forms.GroupBox();
-            this.registers_progress = new System.Windows.Forms.ProgressBar();
             this.errorMessage = new System.Windows.Forms.Label();
+            this.registers_progress = new System.Windows.Forms.ProgressBar();
             this.functions = new System.Windows.Forms.GroupBox();
+            this.save_to_memory = new System.Windows.Forms.CheckBox();
+            this.label1 = new System.Windows.Forms.Label();
+            this.access_memory = new System.Windows.Forms.TextBox();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.reg2 = new System.Windows.Forms.ComboBox();
             this.reg1 = new System.Windows.Forms.ComboBox();
@@ -79,9 +82,14 @@
             this.label8 = new System.Windows.Forms.Label();
             this.label9 = new System.Windows.Forms.Label();
             this.label10 = new System.Windows.Forms.Label();
+            this.random_values = new System.Windows.Forms.Button();
+            this.memory_groupbox = new System.Windows.Forms.GroupBox();
+            this.listViewOfMemory = new System.Windows.Forms.ListView();
+            this.columnHeader1 = new System.Windows.Forms.ColumnHeader();
             this.setregisters.SuspendLayout();
             this.functions.SuspendLayout();
             this.active_registers.SuspendLayout();
+            this.memory_groupbox.SuspendLayout();
             this.SuspendLayout();
             // 
             // al_textbox
@@ -291,6 +299,7 @@
             // 
             // al_value
             // 
+            this.al_value.AccessibleName = "AL";
             this.al_value.AutoSize = true;
             this.al_value.BackColor = System.Drawing.Color.Red;
             this.al_value.ForeColor = System.Drawing.Color.Black;
@@ -303,6 +312,7 @@
             // 
             // ah_value
             // 
+            this.ah_value.AccessibleName = "AH";
             this.ah_value.AutoSize = true;
             this.ah_value.BackColor = System.Drawing.Color.Red;
             this.ah_value.ForeColor = System.Drawing.Color.Black;
@@ -315,6 +325,7 @@
             // 
             // cl_value
             // 
+            this.cl_value.AccessibleName = "CL";
             this.cl_value.AutoSize = true;
             this.cl_value.BackColor = System.Drawing.Color.Red;
             this.cl_value.ForeColor = System.Drawing.Color.Black;
@@ -327,6 +338,7 @@
             // 
             // ch_value
             // 
+            this.ch_value.AccessibleName = "CH";
             this.ch_value.AutoSize = true;
             this.ch_value.BackColor = System.Drawing.Color.Red;
             this.ch_value.ForeColor = System.Drawing.Color.Black;
@@ -339,6 +351,7 @@
             // 
             // dl_value
             // 
+            this.dl_value.AccessibleName = "DL";
             this.dl_value.AutoSize = true;
             this.dl_value.BackColor = System.Drawing.Color.Red;
             this.dl_value.ForeColor = System.Drawing.Color.Black;
@@ -351,6 +364,7 @@
             // 
             // dh_value
             // 
+            this.dh_value.AccessibleName = "DH";
             this.dh_value.AutoSize = true;
             this.dh_value.BackColor = System.Drawing.Color.Red;
             this.dh_value.ForeColor = System.Drawing.Color.Black;
@@ -417,6 +431,7 @@
             // 
             // bl_value
             // 
+            this.bl_value.AccessibleName = "BL";
             this.bl_value.AutoSize = true;
             this.bl_value.BackColor = System.Drawing.Color.Red;
             this.bl_value.ForeColor = System.Drawing.Color.Black;
@@ -429,6 +444,7 @@
             // 
             // bh_value
             // 
+            this.bh_value.AccessibleName = "BH";
             this.bh_value.AutoSize = true;
             this.bh_value.BackColor = System.Drawing.Color.Red;
             this.bh_value.ForeColor = System.Drawing.Color.Black;
@@ -455,7 +471,7 @@
             this.bh_check.AutoCheck = false;
             this.bh_check.AutoSize = true;
             this.bh_check.BackColor = System.Drawing.Color.Transparent;
-            this.bh_check.Location = new System.Drawing.Point(101, 133);
+            this.bh_check.Location = new System.Drawing.Point(101, 137);
             this.bh_check.Name = "bh_check";
             this.bh_check.Size = new System.Drawing.Size(18, 17);
             this.bh_check.TabIndex = 33;
@@ -463,6 +479,7 @@
             // 
             // setregisters
             // 
+            this.setregisters.Controls.Add(this.errorMessage);
             this.setregisters.Controls.Add(this.registers_progress);
             this.setregisters.Controls.Add(this.al_textbox);
             this.setregisters.Controls.Add(this.BH);
@@ -495,6 +512,17 @@
             this.setregisters.TabStop = false;
             this.setregisters.Text = "SET_REGISTERS";
             // 
+            // errorMessage
+            // 
+            this.errorMessage.AutoSize = true;
+            this.errorMessage.Font = new System.Drawing.Font("Segoe UI", 7.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+            this.errorMessage.ForeColor = System.Drawing.Color.Silver;
+            this.errorMessage.Location = new System.Drawing.Point(18, 321);
+            this.errorMessage.Name = "errorMessage";
+            this.errorMessage.Size = new System.Drawing.Size(168, 17);
+            this.errorMessage.TabIndex = 38;
+            this.errorMessage.Text = "FILL ALL REGISTERS VALUES";
+            // 
             // registers_progress
             // 
             this.registers_progress.BackColor = System.Drawing.Color.LightCoral;
@@ -507,20 +535,11 @@
             this.registers_progress.Step = 1;
             this.registers_progress.TabIndex = 37;
             // 
-            // errorMessage
-            // 
-            this.errorMessage.AutoSize = true;
-            this.errorMessage.Font = new System.Drawing.Font("Segoe UI", 13.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-            this.errorMessage.ForeColor = System.Drawing.Color.Silver;
-            this.errorMessage.Location = new System.Drawing.Point(28, 186);
-            this.errorMessage.Name = "errorMessage";
-            this.errorMessage.Size = new System.Drawing.Size(297, 31);
-            this.errorMessage.TabIndex = 38;
-            this.errorMessage.Text = "FILL ALL REGISTERS VALUES";
-            // 
             // functions
             // 
-            this.functions.Controls.Add(this.errorMessage);
+            this.functions.Controls.Add(this.save_to_memory);
+            this.functions.Controls.Add(this.label1);
+            this.functions.Controls.Add(this.access_memory);
             this.functions.Controls.Add(this.groupBox1);
             this.functions.Controls.Add(this.reg2);
             this.functions.Controls.Add(this.reg1);
@@ -529,10 +548,36 @@
             this.functions.Enabled = false;
             this.functions.Location = new System.Drawing.Point(223, 12);
             this.functions.Name = "functions";
-            this.functions.Size = new System.Drawing.Size(357, 376);
+            this.functions.Size = new System.Drawing.Size(357, 158);
             this.functions.TabIndex = 35;
             this.functions.TabStop = false;
             this.functions.Text = "FUNCTIONS";
+            // 
+            // save_to_memory
+            // 
+            this.save_to_memory.AutoSize = true;
+            this.save_to_memory.Location = new System.Drawing.Point(199, 128);
+            this.save_to_memory.Name = "save_to_memory";
+            this.save_to_memory.Size = new System.Drawing.Size(141, 24);
+            this.save_to_memory.TabIndex = 39;
+            this.save_to_memory.Text = "save_to_memory";
+            this.save_to_memory.UseVisualStyleBackColor = true;
+            // 
+            // label1
+            // 
+            this.label1.AutoSize = true;
+            this.label1.Location = new System.Drawing.Point(7, 70);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(115, 20);
+            this.label1.TabIndex = 38;
+            this.label1.Text = "FROM MEMORY";
+            // 
+            // access_memory
+            // 
+            this.access_memory.Location = new System.Drawing.Point(125, 65);
+            this.access_memory.Name = "access_memory";
+            this.access_memory.Size = new System.Drawing.Size(82, 27);
+            this.access_memory.TabIndex = 37;
             // 
             // groupBox1
             // 
@@ -588,7 +633,7 @@
             // execute
             // 
             this.execute.Enabled = false;
-            this.execute.Location = new System.Drawing.Point(6, 341);
+            this.execute.Location = new System.Drawing.Point(256, 69);
             this.execute.Name = "execute";
             this.execute.Size = new System.Drawing.Size(94, 29);
             this.execute.TabIndex = 1;
@@ -603,7 +648,16 @@
             this.choose_function.FormattingEnabled = true;
             this.choose_function.Items.AddRange(new object[] {
             "MOV",
-            "XCHG"});
+            "XCHG",
+            "AND",
+            "NAND",
+            "OR",
+            "NOR",
+            "XOR",
+            "XNOR",
+            "INC",
+            "DEC",
+            "NOT"});
             this.choose_function.Location = new System.Drawing.Point(7, 24);
             this.choose_function.Name = "choose_function";
             this.choose_function.Size = new System.Drawing.Size(103, 28);
@@ -708,11 +762,45 @@
             this.label10.TabIndex = 40;
             this.label10.Text = "CL";
             // 
+            // random_values
+            // 
+            this.random_values.Location = new System.Drawing.Point(130, 395);
+            this.random_values.Name = "random_values";
+            this.random_values.Size = new System.Drawing.Size(94, 29);
+            this.random_values.TabIndex = 37;
+            this.random_values.Text = "RANDOM";
+            this.random_values.UseVisualStyleBackColor = true;
+            this.random_values.Click += new System.EventHandler(this.random_values_Click);
+            // 
+            // memory_groupbox
+            // 
+            this.memory_groupbox.Controls.Add(this.listViewOfMemory);
+            this.memory_groupbox.Enabled = false;
+            this.memory_groupbox.Location = new System.Drawing.Point(224, 164);
+            this.memory_groupbox.Name = "memory_groupbox";
+            this.memory_groupbox.Size = new System.Drawing.Size(357, 224);
+            this.memory_groupbox.TabIndex = 38;
+            this.memory_groupbox.TabStop = false;
+            this.memory_groupbox.Text = "MEMORY";
+            // 
+            // listViewOfMemory
+            // 
+            this.listViewOfMemory.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
+            this.columnHeader1});
+            this.listViewOfMemory.Font = new System.Drawing.Font("Segoe UI", 7.8F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
+            this.listViewOfMemory.Location = new System.Drawing.Point(6, 54);
+            this.listViewOfMemory.Name = "listViewOfMemory";
+            this.listViewOfMemory.Size = new System.Drawing.Size(343, 151);
+            this.listViewOfMemory.TabIndex = 0;
+            this.listViewOfMemory.UseCompatibleStateImageBehavior = false;
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 20F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(794, 433);
+            this.Controls.Add(this.memory_groupbox);
+            this.Controls.Add(this.random_values);
             this.Controls.Add(this.active_registers);
             this.Controls.Add(this.functions);
             this.Controls.Add(this.setregisters);
@@ -725,6 +813,7 @@
             this.functions.PerformLayout();
             this.active_registers.ResumeLayout(false);
             this.active_registers.PerformLayout();
+            this.memory_groupbox.ResumeLayout(false);
             this.ResumeLayout(false);
 
         }
@@ -782,5 +871,12 @@
         private Label label9;
         private Label label10;
         private Label errorMessage;
+        private Button random_values;
+        private GroupBox memory_groupbox;
+        private ListView listViewOfMemory;
+        private TextBox access_memory;
+        private Label label1;
+        private CheckBox save_to_memory;
+        private ColumnHeader columnHeader1;
     }
 }
